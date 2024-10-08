@@ -56,7 +56,7 @@ module.exports = {
 
             const sql = `UPDATE cultivo SET Cult_Nome = ?, Cult_Agrotocico = ?, Prop_Id = ?`;
 
-            const values = [Cult_Nome, Cult_Agrotoxico, Prop_Id];
+            const values = [Cult_Nome, Cult_Agrotoxico, Prop_Id,Cult_Id];
 
             const atualizaDados = await db.query(sql, values);
 
@@ -74,11 +74,20 @@ module.exports = {
         }
     }, 
     async apagarCultivo(request, response) {
-        try {            
+        try {
+            
+            const {Cult_Id} = request.params;
+
+            const sql = `DELETE FROM cultivo WHERE Cult_Id = ?`;
+
+            const values = [Cult_Id];
+
+            const excluir = await db.query(sql, values);
+
             return response.status(200).json({
                 sucesso: true, 
-                mensagem: 'Apagar Cultivo.', 
-                dados: null
+                mensagem: 'Cultivo ${Cult_Id} excluído com sucesso.', 
+                dados: excluir[0].affectedRows
             });
         } catch (error) {
             return response.status(500).json({

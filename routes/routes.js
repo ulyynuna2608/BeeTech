@@ -82,7 +82,7 @@ const CultivoController = require('../controllers/cultivo');
 
 router.get('/cultivo', CultivoController.listarCultivo); 
 router.post('/cultivo', CultivoController.cadastrarCultivo); 
-router.patch('/cultivo', CultivoController.editarCultivo); 
+router.patch('/cultivo/:Cult_id', CultivoController.editarCultivo); 
 router.delete('/cultivo', CultivoController.apagarCultivo); 
 
 
