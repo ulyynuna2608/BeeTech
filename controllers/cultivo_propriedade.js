@@ -3,14 +3,14 @@ const db = require('../database/connection');
 module.exports = {
     async listarCultivoPropriedade(request, response) {
         try {            
-            const sql = `SELECT Cult_Prop_Id, Cult_Id, Prop_Id`;
+            const sql = `SELECT Cult_Prop_Id, Cult_Id, Prop_Id FROM cultivo_propriedade`;
 
             const cultivo_propriedade = await db.query(sql);
 
             return response.status(200).json({
                 sucesso: true, 
                 mensagem: 'Lista de Cultivo Propriedade.', 
-                dados: cultivo_propriedade[0]
+                dados: cultivo_propriedade
             });
         } catch (error) {
             return response.status(500).json({
@@ -24,14 +24,14 @@ module.exports = {
     async cadastrarCultivoPropriedade(request, response) {
         try {            
 
-            const { Cult_Id, Cult_Arotoxico, Prop_Id} = resquest.body;
+            const { Cult_Id, Prop_Id} = request.body;
 
             const sql = `INSERT INTO cultivo_propriedade ( Cult_Id , Prop_Id) VALUES
 ( ?, ? )`;
 
-            const values = [Cult_Id, , Prop_Id];
+            const values = [Cult_Id, Prop_Id];
 
-            const execSql = await db.quary(sql, values);
+            const execSql = await db.query(sql, values);
 
             const Cult_Prop_Id = execSql[0].insetId;
 
@@ -51,9 +51,9 @@ module.exports = {
     async editarCultivoPropriedade(request, response) {
         try {            
 
-            const {Cult_Id, Prop_Id} = resquest.body;
+            const {Cult_Id, Prop_Id} = request.body;
 
-            const {Cult_Prop_Id} = resquet.params;
+            const {Cult_Prop_Id} = request.params;
 
             const sql = `UPDATE cultivo_propriedade SET Cult_Id= ?, Prop_Id = ?`;
 

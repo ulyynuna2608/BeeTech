@@ -3,14 +3,14 @@ const db = require('../database/connection');
 module.exports = {
     async listarCultivo(request, response) {
         try {            
-            const sql = `SELECT Cult_Id, Cult_Nome, Cult_Agrotoxico, Prop_Id`;
+            const sql = `SELECT Cult_Id, Cult_Nome, Cult_Agrotoxico = 1 AS Cult_Agrotoxico, Prop_Id From cultivo`;
 
             const cultivo = await db.query(sql);
 
             return response.status(200).json({
                 sucesso: true, 
                 mensagem: 'Lista de Cultivo.', 
-                dados: cultivo[0]
+                dados: cultivo
             });
         } catch (error) {
             return response.status(500).json({
@@ -24,16 +24,16 @@ module.exports = {
     async cadastrarCultivo(request, response) {
         try {            
 
-            const { Cult_Nome, Cult_Agrotoxico, Prop_Id} = resquest.body;
+            const { Cult_Nome, Cult_Agrotoxico, Prop_Id} = request.body;
 
-            const sql = `INSERT INTO Cultivo (, Cult_Nome, Cult_Agrotoxico, Prop_Id) VALUES
+            const sql = `INSERT INTO Cultivo (Cult_Nome, Cult_Agrotoxico, Prop_Id) VALUES
 ( ?, ?, ? )`;
 
             const values = [Cult_Nome, Cult_Agrotoxico, Prop_Id];
 
-            const execSql = await db.quary(sql, values);
+            const execSql = await db.query(sql, values);
 
-            const Cult_Id = execSql[0].insetId;
+            const Cult_Id = execSql[0].insertId;
             
             return response.status(200).json({
                 sucesso: true, 
@@ -50,11 +50,11 @@ module.exports = {
     }, 
     async editarCultivo(request, response) {
         try {
-            const {Cult_Nome, Cult_Agrotoxico, Prop_Id} = resquest.body;
+            const {Cult_Nome, Cult_Agrotoxico, Prop_Id} = request.body;
 
-            const {Cult_Id} = resquet.params;
+            const {Cult_Id} = request.params;
 
-            const sql = `UPDATE cultivo SET Cult_Nome = ?, Cult_Agrotocico = ?, Prop_Id = ?`;
+            const sql = `UPDATE cultivo SET Cult_Nome = ?, Cult_Agrotoxico = ?, Prop_Id = ?`;
 
             const values = [Cult_Nome, Cult_Agrotoxico, Prop_Id,Cult_Id];
 
@@ -86,7 +86,7 @@ module.exports = {
 
             return response.status(200).json({
                 sucesso: true, 
-                mensagem: 'Cultivo ${Cult_Id} excluído com sucesso.', 
+                mensagem: `Cultivo ${Cult_Id} excluído com sucesso.`, 
                 dados: excluir[0].affectedRows
             });
         } catch (error) {
