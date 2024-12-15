@@ -1,8 +1,0 @@
-/* APAGAR TABELA*/
-
-/* SELECIONAR TABELA*/
-
-
-
-
-
